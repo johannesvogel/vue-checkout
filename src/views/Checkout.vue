@@ -1,17 +1,22 @@
 <template>
   <div class="checkout">
-    <CreditCardSwiper :creditCards="creditCards" />
+    <TopHeader @addNewCreditCard="onAddNewCreditCard" />
+    <CreditCardSwiper :creditCards="creditCards" v-on:creditCardChanged="onCreditCardChanged" />
+    <CheckoutForm :activeCreditCard="activeCreditCard" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
+import TopHeader from '@/components/TopHeader.vue';
 import CreditCardSwiper from '@/components/CreditCardSwiper.vue';
+import CheckoutForm from '@/components/CheckoutForm.vue';
 
 export default {
-  name: 'home',
+  name: 'checkout',
   components: {
+    TopHeader,
     CreditCardSwiper,
+    CheckoutForm,
   },
   data() {
     return {
@@ -21,24 +26,44 @@ export default {
           ccType: 'visa',
           ccNumber: '1234456798765432',
           ccName: 'Max Mustermann',
-          ccValidity: '06/21',
+          ccExpiry: '06/21',
         },
         {
           id: 1,
           ccType: 'mc',
           ccNumber: '1111222233334444',
           ccName: 'John Doe',
-          ccValidity: '03/19',
+          ccExpiry: '03/19',
         },
         {
           id: 2,
           ccType: 'mc',
           ccNumber: '9999888877776666',
           ccName: 'Monsieur Dupont',
-          ccValidity: '12/23',
+          ccExpiry: '12/23',
         },
       ],
+      activeCreditCardId: null,
     };
+  },
+  computed: {
+    activeCreditCard() {
+      return this.creditCards.find(cc => cc.id === this.activeCreditCardId);
+    },
+  },
+  methods: {
+    onCreditCardChanged(creditCardId) {
+      this.activeCreditCardId = creditCardId;
+    },
+    onAddNewCreditCard() {
+      this.creditCards.push({
+        id: null,
+        ccType: '',
+        ccNumber: '',
+        ccName: '',
+        ccExpiry: '',
+      })
+    }
   },
 };
 </script>

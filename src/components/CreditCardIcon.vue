@@ -1,6 +1,9 @@
 <template>
   <div class="credit-card-icon">
-    <img :src="`${baseUrl}static/cc-icons/${this.creditCardType}.png`" class="credit-card-icon-image" />
+    <img
+      :src="`${baseUrl}static/cc-icons/${this.creditCardType}.png`"
+      class="credit-card-icon-image"
+    />
   </div>
 </template>
 
@@ -15,10 +18,10 @@ export default {
       default: null,
     },
   },
-  data () {
+  data() {
     return {
-      baseUrl: process.env.BASE_URL
-    }
+      baseUrl: process.env.BASE_URL,
+    };
   },
 };
 </script>

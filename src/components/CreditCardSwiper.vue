@@ -1,6 +1,11 @@
 <template>
   <div class="credit-card-swiper-container">
-    <swiper :options="swiperOptions" class="credit-card-swiper">
+    <swiper
+      :options="swiperOptions"
+      class="credit-card-swiper"
+      ref="creditCardSwiper"
+      @slideChange="onSlideChanged"
+    >
       <swiper-slide class="swiper-item" v-for="creditCard in creditCards" :key="creditCard.id">
         <CreditCard :creditCard="creditCard" />
       </swiper-slide>
@@ -33,12 +38,31 @@ export default {
         direction: 'horizontal',
         slidesPerView: 1,
         spaceBetween: 30,
+        centeredSlides: true,
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
         },
       },
     };
+  },
+  computed: {
+    swiper() {
+      return this.$refs.creditCardSwiper.swiper;
+    },
+  },
+  methods: {
+    updateActiveCreditCard() {
+      const creditCardIndex = this.swiper.activeIndex;
+      const creditCard = this.creditCards[creditCardIndex];
+      this.$emit('creditCardChanged', creditCard.id);
+    },
+    onSlideChanged() {
+      this.updateActiveCreditCard();
+    },
+  },
+  mounted() {
+    this.updateActiveCreditCard();
   },
 };
 </script>
@@ -47,7 +71,8 @@ export default {
 .credit-card-swiper-container {
   position: relative;
   background-image: linear-gradient(to bottom right, #835FFE, #36BBFE);
-  padding: 20px;
+  padding: 50px 20px 20px 20px;
+  overflow: hidden;
 }
 .credit-card-swiper {
   width: 100%;
