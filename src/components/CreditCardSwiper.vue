@@ -1,5 +1,6 @@
 <template>
   <div class="credit-card-swiper-container">
+    <a href="#" class="add-cc-button" @click.prevent="onAddCreditCardButtonClicked">+</a>
     <swiper
       :options="swiperOptions"
       class="credit-card-swiper"
@@ -57,12 +58,21 @@ export default {
       const creditCard = this.creditCards[creditCardIndex];
       this.$emit('creditCardChanged', creditCard.id);
     },
+    onAddCreditCardButtonClicked() {
+      this.$emit('addNewCreditCard');
+    },
     onSlideChanged() {
       this.updateActiveCreditCard();
     },
   },
   mounted() {
     this.updateActiveCreditCard();
+  },
+  watch: {
+    creditCards() {
+      // There is no "slideAdded" event, so we wait a bit until the slide has been added
+      window.setTimeout(() => this.swiper.slideTo(this.creditCards.length, 500), 150);
+    },
   },
 };
 </script>
@@ -73,6 +83,17 @@ export default {
   background-image: linear-gradient(to bottom right, #835FFE, #36BBFE);
   padding: 50px 20px 20px 20px;
   overflow: hidden;
+}
+.add-cc-button {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  padding: 20px 20px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
 }
 .credit-card-swiper {
   width: 100%;

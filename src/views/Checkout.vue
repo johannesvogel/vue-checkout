@@ -1,7 +1,11 @@
 <template>
   <div class="checkout">
-    <TopHeader @addNewCreditCard="onAddNewCreditCard" />
-    <CreditCardSwiper :creditCards="creditCards" v-on:creditCardChanged="onCreditCardChanged" />
+    <TopHeader />
+    <CreditCardSwiper
+      :creditCards="creditCards"
+      @creditCardChanged="onCreditCardChanged"
+      @addNewCreditCard="onAddNewCreditCard"
+    />
     <CheckoutForm :activeCreditCard="activeCreditCard" />
   </div>
 </template>
@@ -62,8 +66,8 @@ export default {
         ccNumber: '',
         ccName: '',
         ccExpiry: '',
-      })
-    }
+      });
+    },
   },
 };
 </script>
