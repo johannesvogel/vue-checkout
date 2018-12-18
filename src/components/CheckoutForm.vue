@@ -11,19 +11,35 @@
     </div>
     <div class="form-group">
       <label for="cc-name">Cardholder name</label>
-      <input type="text" id="cc-name" v-model="creditCard.ccName">
+      <input
+        type="text"
+        id="cc-name"
+        v-model="creditCard.ccName"
+        :class="{ valid: ccNameValid }"
+      >
     </div>
     <div class="row">
       <div class="form-group">
         <label for="cc-expiry">Expiry date</label>
-        <input type="text" id="cc-expiry" v-model="creditCard.ccExpiry">
+        <input
+          type="text"
+          id="cc-expiry"
+          v-model="creditCard.ccExpiry"
+          :class="{ invalid: ccExpiryInvalid, valid: ccExpiryValid }"
+        >
       </div>
       <div class="form-group">
         <label for="cc-cvv">CVV</label>
-        <input type="password" id="cc-cvv" autocomplete="off">
+        <input
+          type="password"
+          id="cc-cvv"
+          v-model="cvv"
+          :class="{ invalid: cvvInvalid, valid: cvvValid }"
+          autocomplete="off"
+        >
       </div>
     </div>
-    <button class="fullwidth-button">Pay 123€</button>
+    <button class="fullwidth-button" :disabled="!formValid">Pay 123€</button>
   </form>
 </template>
 
@@ -48,9 +64,43 @@ export default {
         ccName: '',
         ccExpiry: '',
       },
-      ccNumberInvalid: false,
-      ccNumberValid: false,
+      cvv: '',
     };
+  },
+  computed: {
+    cardNumberValidator() {
+      return cardValidator.number(this.creditCard.ccNumber);
+    },
+    ccNumberValid() {
+      return this.cardNumberValidator.isValid;
+    },
+    ccNumberInvalid() {
+      return !this.cardNumberValidator.isPotentiallyValid;
+    },
+    ccNameValid() {
+      return this.creditCard.ccName.length > 0;
+    },
+    expirationValidator() {
+      return cardValidator.expirationDate(this.creditCard.ccExpiry);
+    },
+    ccExpiryValid() {
+      return this.expirationValidator.isValid;
+    },
+    ccExpiryInvalid() {
+      return !this.expirationValidator.isPotentiallyValid;
+    },
+    cvvValidator() {
+      return cardValidator.cvv(this.cvv);
+    },
+    cvvValid() {
+      return this.cvvValidator.isValid;
+    },
+    cvvInvalid() {
+      return !this.cvvValidator.isPotentiallyValid;
+    },
+    formValid() {
+      return this.ccNumberValid && this.ccNameValid && this.ccExpiryValid && this.cvvValid;
+    },
   },
   methods: {
     formatCreditCardNumber(value) {
@@ -65,6 +115,7 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.creditCard = newVal;
+          this.cvv = '';
         }
       },
     },
@@ -72,11 +123,8 @@ export default {
       immediate: true,
       deep: true,
       handler(newVal) {
-        if (newVal && newVal.ccNumber) {
-          const ccValidation = cardValidator.number(newVal.ccNumber);
-          this.ccNumberInvalid = !ccValidation.isPotentiallyValid;
-          this.ccNumberValid = ccValidation.isValid;
-          this.creditCard.ccType = ccValidation.card ? ccValidation.card.type : null;
+        if (newVal && 'ccNumber' in newVal) {
+          this.creditCard.ccType = this.cardNumberValidator.card ? this.cardNumberValidator.card.type : null;
           this.creditCard.ccNumber = this.formatCreditCardNumber(newVal.ccNumber);
         }
       },
@@ -102,6 +150,12 @@ export default {
   border: none;
   box-shadow: 5px 5px 20px 0px #C0CFFA;
   cursor: pointer;
+  transition: all 300ms linear;
+
+  &:disabled {
+    filter: grayscale(100%);
+    transition: all 300ms linear;
+  }
 }
 .form-group {
   margin-bottom: 30px;

@@ -132,5 +132,9 @@ export default {
     background-color: #4449D8;
     transition: background-color 300ms linear;
   }
+
+  &:focus {
+    outline: 0;
+  }
 }
 </style>
