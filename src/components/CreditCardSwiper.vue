@@ -112,3 +112,25 @@ export default {
   bottom: 0;
 }
 </style>
+
+<style lang="scss">
+.swiper-pagination {
+  position: relative;
+  margin: auto;
+}
+
+.swiper-pagination-bullet {
+  border-radius: 0;
+  margin: 0 5px;
+  height: 2px;
+  width: 25px;
+  background-color: #7FBCFE;
+  transition: background-color 300ms linear;
+  opacity: 1;
+
+  &-active {
+    background-color: #4449D8;
+    transition: background-color 300ms linear;
+  }
+}
+</style>

@@ -1,7 +1,8 @@
 <template>
   <div class="credit-card-icon">
     <img
-      :src="`${baseUrl}static/cc-icons/${this.creditCardType}.png`"
+      :src="iconUrl"
+      v-if="validCreditCardTypes.includes(creditCardType)"
       class="credit-card-icon-image"
     />
   </div>
@@ -21,7 +22,16 @@ export default {
   data() {
     return {
       baseUrl: process.env.BASE_URL,
+      validCreditCardTypes: [
+        'mastercard',
+        'visa',
+      ],
     };
+  },
+  computed: {
+    iconUrl() {
+      return `${this.baseUrl}static/cc-icons/${this.creditCardType}.png`;
+    },
   },
 };
 </script>

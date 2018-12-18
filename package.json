@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "card-validator": "^6.1.0",
     "swiper": "^4.4.2",
     "vue": "^2.5.17",
     "vue-awesome-swiper": "^3.1.3",

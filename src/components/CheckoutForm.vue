@@ -6,6 +6,7 @@
         type="text"
         id="card-number"
         v-model="creditCard.ccNumber"
+        :class="{ invalid: ccNumberInvalid, valid: ccNumberValid }"
       >
     </div>
     <div class="form-group">
@@ -27,6 +28,8 @@
 </template>
 
 <script>
+const cardValidator = require('card-validator');
+
 export default {
   name: 'checkout-form',
   components: {},
@@ -43,8 +46,10 @@ export default {
         ccType: '',
         ccNumber: '',
         ccName: '',
-        ccValiccExpirydity: '',
+        ccExpiry: '',
       },
+      ccNumberInvalid: false,
+      ccNumberValid: false,
     };
   },
   methods: {
@@ -58,7 +63,7 @@ export default {
     activeCreditCard: {
       immediate: true,
       handler(newVal) {
-        if (newVal && newVal.id !== null) {
+        if (newVal) {
           this.creditCard = newVal;
         }
       },
@@ -67,7 +72,11 @@ export default {
       immediate: true,
       deep: true,
       handler(newVal) {
-        if (newVal && newVal.ccNumber && newVal.ccNumber.slice(-1) !== ' ') {
+        if (newVal && newVal.ccNumber) {
+          const ccValidation = cardValidator.number(newVal.ccNumber);
+          this.ccNumberInvalid = !ccValidation.isPotentiallyValid;
+          this.ccNumberValid = ccValidation.isValid;
+          this.creditCard.ccType = ccValidation.card ? ccValidation.card.type : null;
           this.creditCard.ccNumber = this.formatCreditCardNumber(newVal.ccNumber);
         }
       },
@@ -107,6 +116,7 @@ export default {
     width: 100%;
     border: none;
     border-bottom: 1px solid #D7D9E1;
+    transition: border-bottom-color 300ms linear;
     font-size: 20px;
     font-weight: bold;
     color: #0133B5;
@@ -114,6 +124,16 @@ export default {
 
     &:focus {
       outline: none;
+    }
+
+    &.invalid {
+      border-bottom-color: red;
+      transition: border-bottom-color 300ms linear;
+    }
+
+    &.valid {
+      border-bottom-color: green;
+      transition: border-bottom-color 300ms linear;
     }
   }
 }
