@@ -1,54 +1,60 @@
 <template>
-  <form class="checkout-form">
-    <div class="form-group">
-      <label for="cc-number">Card number</label>
-      <input
-        type="text"
-        id="card-number"
-        v-model="creditCard.ccNumber"
-        :class="{
-          invalid: !cardNumberValidator.isPotentiallyValid,
-          valid: cardNumberValidator.isValid
-        }"
-      >
-    </div>
-    <div class="form-group">
-      <label for="cc-name">Cardholder name</label>
-      <input
-        type="text"
-        id="cc-name"
-        v-model="creditCard.ccName"
-        :class="{ valid: ccNameValid }"
-      >
-    </div>
-    <div class="row">
+  <form class="creditcard-form">
+    <div class="creditcard-form-container">
+      <h2 class="headline">Add new credit card</h2>
       <div class="form-group">
-        <label for="cc-expiry">Expiry date</label>
+        <label for="cc-number">Card number</label>
         <input
           type="text"
-          id="cc-expiry"
-          v-model="creditCard.ccExpiry"
+          id="card-number"
+          v-model="creditCard.ccNumber"
           :class="{
-            invalid: !expirationValidator.isPotentiallyValid,
-            valid: expirationValidator.isValid
+            invalid: !cardNumberValidator.isPotentiallyValid,
+            valid: cardNumberValidator.isValid
           }"
         >
       </div>
       <div class="form-group">
-        <label for="cc-cvv">CVV</label>
+        <label for="cc-name">Cardholder name</label>
         <input
-          type="password"
-          id="cc-cvv"
-          v-model="cvv"
-          :class="{
-            invalid: !cvvValidator.isPotentiallyValid,
-            valid: cvvValidator.isValid
-          }"
-          autocomplete="off"
+          type="text"
+          id="cc-name"
+          v-model="creditCard.ccName"
+          :class="{ valid: ccNameValid }"
         >
       </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="cc-expiry">Expiry date</label>
+          <input
+            type="text"
+            id="cc-expiry"
+            v-model="creditCard.ccExpiry"
+            :class="{
+              invalid: !expirationValidator.isPotentiallyValid,
+              valid: expirationValidator.isValid
+            }"
+          >
+        </div>
+        <div class="form-group">
+          <label for="cc-cvv">CVV</label>
+          <input
+            type="password"
+            id="cc-cvv"
+            v-model="cvv"
+            :class="{
+              invalid: !cvvValidator.isPotentiallyValid,
+              valid: cvvValidator.isValid
+            }"
+            autocomplete="off"
+          >
+        </div>
+      </div>
+      <div class="row">
+        <button class="button" @click.prevent="saveCreditCard" :disabled="!formValid">Save</button>
+        <button class="button" @click.prevent="closeForm">Cancel</button>
+      </div>
     </div>
-    <button class="fullwidth-button" :disabled="!formValid">Pay 123€</button>
   </form>
 </template>
 
@@ -56,14 +62,9 @@
 const cardValidator = require('card-validator');
 
 export default {
-  name: 'checkout-form',
+  name: 'creditcard-form',
   components: {},
-  props: {
-    activeCreditCard: {
-      type: Object,
-      default: () => {},
-    },
-  },
+  props: {},
   data() {
     return {
       creditCard: {
@@ -102,6 +103,12 @@ export default {
       const ccNumber = value.toString();
       return ccNumber.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ').trim();
     },
+    saveCreditCard() {
+      this.$emit('saveCreditCardForm', this.creditCard);
+    },
+    closeForm() {
+      this.$emit('closeForm');
+    },
   },
   watch: {
     activeCreditCard: {
@@ -130,28 +137,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.checkout-form {
-  padding: 20px;
+.creditcard-form {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.creditcard-form-container {
+  border-radius: 25px;
+  background-color: #fff;
+  box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.2);
+  padding: 15px 20px 50px 20px;
   max-width: 290px;
   margin: auto;
+  color: #333;
 }
-.fullwidth-button {
-  width: 100%;
-  margin: auto;
-  padding: 10px 0;
-  color: #ffffff;
+.headline {
+  margin: 0 0 30px 0;
   font-size: 20px;
-  background-image: linear-gradient(to bottom right, #9272FE, #38B8FF);
-  border-radius: 10px;
-  border: none;
-  box-shadow: 5px 5px 20px 0px #C0CFFA;
-  cursor: pointer;
-  transition: all 300ms linear;
-
-  &:disabled {
-    filter: grayscale(100%);
-    transition: all 300ms linear;
-  }
+  text-align: center;
 }
 .form-group {
   margin-bottom: 30px;
@@ -194,6 +202,30 @@ export default {
   .form-group {
     flex-grow: 1;
     margin-right: 25px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .button {
+    flex-grow: 1;
+    margin-right: 30px;
+    padding: 10px 0;
+    color: #ffffff;
+    font-size: 20px;
+    background-image: linear-gradient(to bottom right, #9272FE, #38B8FF);
+    border: 0;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 5px 5px 20px 0px #C0CFFA;
+    cursor: pointer;
+    transition: all 300ms linear;
+
+    &:disabled {
+      filter: grayscale(100%);
+      transition: all 300ms linear;
+    }
 
     &:last-child {
       margin-right: 0;

@@ -1,12 +1,22 @@
 <template>
   <div class="checkout">
     <TopHeader />
+    <a href="#" class="add-cc-button" @click.prevent="onAddCreditCardButtonClicked">+</a>
     <CreditCardSwiper
       :creditCards="creditCards"
       @creditCardChanged="onCreditCardChanged"
-      @addNewCreditCard="onAddNewCreditCard"
     />
-    <CreditCardForm :activeCreditCard="activeCreditCard" />
+    <transition name="fade">
+      <CreditCardForm
+        :isVisible="showCreditCardForm"
+        @closeForm="onCloseCreditCardForm"
+        @saveCreditCardForm="onSaveCreditCardForm"
+        v-if="showCreditCardForm"
+      />
+    </transition>
+    <CheckoutForm
+      :activeCreditCard="activeCreditCard"
+    />
   </div>
 </template>
 
@@ -14,6 +24,9 @@
 import TopHeader from '@/components/TopHeader.vue';
 import CreditCardSwiper from '@/components/CreditCardSwiper.vue';
 import CreditCardForm from '@/components/CreditCardForm.vue';
+import CheckoutForm from '@/components/CheckoutForm.vue';
+
+const cardValidator = require('card-validator');
 
 export default {
   name: 'checkout',
@@ -21,6 +34,7 @@ export default {
     TopHeader,
     CreditCardSwiper,
     CreditCardForm,
+    CheckoutForm,
   },
   data() {
     return {
@@ -34,20 +48,21 @@ export default {
         },
         {
           id: 1,
-          ccType: 'mc',
+          ccType: 'mastercard',
           ccNumber: '5105105105105100',
           ccName: 'John Doe',
           ccExpiry: '03/19',
         },
         {
           id: 2,
-          ccType: 'mc',
+          ccType: 'mastercard',
           ccNumber: '5555555555554444',
           ccName: 'Monsieur Dupont',
           ccExpiry: '12/23',
         },
       ],
       activeCreditCardId: null,
+      showCreditCardForm: false,
     };
   },
   computed: {
@@ -56,21 +71,52 @@ export default {
     },
   },
   methods: {
+    addCreditCard(creditCard) {
+      const ccNumberValidator = cardValidator.number(creditCard.ccNumber);
+      const ccExpiryValidator = cardValidator.expirationDate(creditCard.ccExpiry);
+      const ccNameValid = creditCard.ccName.length > 0;
+      const creditCardValid = ccNumberValidator.isValid && ccExpiryValidator.isValid && ccNameValid;
+      if (creditCardValid) {
+        this.creditCards.push(creditCard);
+      } else {
+        alert('This credit card is not valid.');
+      }
+    },
     onCreditCardChanged(creditCardId) {
       this.activeCreditCardId = creditCardId;
     },
-    onAddNewCreditCard() {
-      this.creditCards.push({
-        id: null,
-        ccType: '',
-        ccNumber: '',
-        ccName: '',
-        ccExpiry: '',
-      });
+    onAddCreditCardButtonClicked() {
+      this.showCreditCardForm = true;
+    },
+    onSaveCreditCardForm(creditCard) {
+      this.showCreditCardForm = false;
+      const newCard = creditCard;
+      newCard.id = this.creditCards.length;
+      this.addCreditCard(newCard);
+    },
+    onCloseCreditCardForm() {
+      this.showCreditCardForm = false;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.add-cc-button {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  padding: 20px 20px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>
