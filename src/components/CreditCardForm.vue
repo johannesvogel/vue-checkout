@@ -6,7 +6,10 @@
         type="text"
         id="card-number"
         v-model="creditCard.ccNumber"
-        :class="{ invalid: ccNumberInvalid, valid: ccNumberValid }"
+        :class="{
+          invalid: !cardNumberValidator.isPotentiallyValid,
+          valid: cardNumberValidator.isValid
+        }"
       >
     </div>
     <div class="form-group">
@@ -25,7 +28,10 @@
           type="text"
           id="cc-expiry"
           v-model="creditCard.ccExpiry"
-          :class="{ invalid: ccExpiryInvalid, valid: ccExpiryValid }"
+          :class="{
+            invalid: !expirationValidator.isPotentiallyValid,
+            valid: expirationValidator.isValid
+          }"
         >
       </div>
       <div class="form-group">
@@ -34,7 +40,10 @@
           type="password"
           id="cc-cvv"
           v-model="cvv"
-          :class="{ invalid: cvvInvalid, valid: cvvValid }"
+          :class="{
+            invalid: !cvvValidator.isPotentiallyValid,
+            valid: cvvValidator.isValid
+          }"
           autocomplete="off"
         >
       </div>
@@ -71,35 +80,20 @@ export default {
     cardNumberValidator() {
       return cardValidator.number(this.creditCard.ccNumber);
     },
-    ccNumberValid() {
-      return this.cardNumberValidator.isValid;
-    },
-    ccNumberInvalid() {
-      return !this.cardNumberValidator.isPotentiallyValid;
-    },
     ccNameValid() {
       return this.creditCard.ccName.length > 0;
     },
     expirationValidator() {
       return cardValidator.expirationDate(this.creditCard.ccExpiry);
     },
-    ccExpiryValid() {
-      return this.expirationValidator.isValid;
-    },
-    ccExpiryInvalid() {
-      return !this.expirationValidator.isPotentiallyValid;
-    },
     cvvValidator() {
       return cardValidator.cvv(this.cvv);
     },
-    cvvValid() {
-      return this.cvvValidator.isValid;
-    },
-    cvvInvalid() {
-      return !this.cvvValidator.isPotentiallyValid;
-    },
     formValid() {
-      return this.ccNumberValid && this.ccNameValid && this.ccExpiryValid && this.cvvValid;
+      return this.cardNumberValidator.isValid
+        && this.ccNameValid
+        && this.expirationValidator.isValid
+        && this.cvvValidator.isValid;
     },
   },
   methods: {
@@ -124,8 +118,10 @@ export default {
       deep: true,
       handler(newVal) {
         if (newVal && 'ccNumber' in newVal) {
-          this.creditCard.ccType = this.cardNumberValidator.card ? this.cardNumberValidator.card.type : null;
           this.creditCard.ccNumber = this.formatCreditCardNumber(newVal.ccNumber);
+          if (this.cardNumberValidator.card) {
+            this.creditCard.ccType = this.cardNumberValidator.card.type;
+          }
         }
       },
     },

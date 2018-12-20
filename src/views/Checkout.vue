@@ -6,21 +6,21 @@
       @creditCardChanged="onCreditCardChanged"
       @addNewCreditCard="onAddNewCreditCard"
     />
-    <CheckoutForm :activeCreditCard="activeCreditCard" />
+    <CreditCardForm :activeCreditCard="activeCreditCard" />
   </div>
 </template>
 
 <script>
 import TopHeader from '@/components/TopHeader.vue';
 import CreditCardSwiper from '@/components/CreditCardSwiper.vue';
-import CheckoutForm from '@/components/CheckoutForm.vue';
+import CreditCardForm from '@/components/CreditCardForm.vue';
 
 export default {
   name: 'checkout',
   components: {
     TopHeader,
     CreditCardSwiper,
-    CheckoutForm,
+    CreditCardForm,
   },
   data() {
     return {
