@@ -52,7 +52,7 @@
       </div>
       <div class="row">
         <button class="button" @click.prevent="saveCreditCard" :disabled="!formValid">Save</button>
-        <button class="button" @click.prevent="closeForm">Cancel</button>
+        <button class="button cancel" @click.prevent="closeForm">Cancel</button>
       </div>
     </div>
   </form>
@@ -151,7 +151,7 @@ export default {
   border-radius: 25px;
   background-color: #fff;
   box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.2);
-  padding: 15px 20px 50px 20px;
+  padding: 15px 20px;
   max-width: 290px;
   margin: auto;
   color: #333;
@@ -229,6 +229,10 @@ export default {
 
     &:last-child {
       margin-right: 0;
+    }
+
+    &.cancel {
+      background-image: linear-gradient(to bottom right, darkred, red);
     }
   }
 }

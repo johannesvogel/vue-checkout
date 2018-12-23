@@ -16,6 +16,7 @@
     </transition>
     <CheckoutForm
       :activeCreditCard="activeCreditCard"
+      :order="order"
     />
   </div>
 </template>
@@ -63,6 +64,22 @@ export default {
       ],
       activeCreditCardId: null,
       showCreditCardForm: false,
+      order: {
+        items: [
+          {
+            id: 0,
+            name: 'Product #1',
+            price: 29.99,
+          },
+          {
+            id: 1,
+            name: 'Product #2',
+            price: 45.99,
+          },
+        ],
+        shipping: 4.99,
+        total: 80.97,
+      },
     };
   },
   computed: {
@@ -102,6 +119,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.checkout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 .add-cc-button {
   position: absolute;
   z-index: 1;

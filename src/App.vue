@@ -7,12 +7,14 @@
 <style lang="scss">
 body {
   margin: 0;
+  min-height: 100vh;
 }
 #app {
   font-family: Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  min-height: 100vh;
 }
 #nav {
   padding: 30px;

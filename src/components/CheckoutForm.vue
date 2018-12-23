@@ -1,15 +1,27 @@
 <template>
   <form class="checkout-form">
-    <button class="fullwidth-button">Pay 125€<div class="subline">with this card</div></button>
+    <h2 class="headline">Your order:</h2>
+    <OrderSummary :order="order" />
+    <button class="fullwidth-button">
+      Pay {{ order.total }}&euro;<div class="subline">with this card</div>
+    </button>
   </form>
 </template>
 
 <script>
+import OrderSummary from '@/components/OrderSummary.vue';
+
 export default {
   name: 'checkout-form',
-  components: {},
+  components: {
+    OrderSummary,
+  },
   props: {
     activeCreditCard: {
+      type: Object,
+      default: () => {},
+    },
+    order: {
       type: Object,
       default: () => {},
     },
@@ -25,13 +37,21 @@ export default {
 
 <style lang="scss" scoped>
 .checkout-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 20px;
+  width: 100%;
+  flex-grow: 1;
   max-width: 290px;
-  margin: auto;
+  margin: 0 auto;
+}
+.headline {
+  margin-bottom: 0;
 }
 .fullwidth-button {
   width: 100%;
-  margin: auto;
+  margin: 0 auto 20px auto;
   padding: 10px 0;
   color: #ffffff;
   font-size: 20px;
