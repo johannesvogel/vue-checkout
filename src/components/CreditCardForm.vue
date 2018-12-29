@@ -1,59 +1,56 @@
 <template>
   <form class="creditcard-form">
-    <div class="creditcard-form-container">
-      <h2 class="headline">Add new credit card</h2>
+    <div class="form-group">
+      <label for="cc-number">Card number</label>
+      <input
+        type="text"
+        id="card-number"
+        v-model="creditCard.ccNumber"
+        :class="{
+          invalid: !cardNumberValidator.isPotentiallyValid,
+          valid: cardNumberValidator.isValid
+        }"
+      >
+    </div>
+    <div class="form-group">
+      <label for="cc-name">Cardholder name</label>
+      <input
+        type="text"
+        id="cc-name"
+        v-model="creditCard.ccName"
+        :class="{ valid: ccNameValid }"
+      >
+    </div>
+    <div class="row">
       <div class="form-group">
-        <label for="cc-number">Card number</label>
+        <label for="cc-expiry">Expiry date</label>
         <input
           type="text"
-          id="card-number"
-          v-model="creditCard.ccNumber"
+          id="cc-expiry"
+          v-model="creditCard.ccExpiry"
           :class="{
-            invalid: !cardNumberValidator.isPotentiallyValid,
-            valid: cardNumberValidator.isValid
+            invalid: !expirationValidator.isPotentiallyValid,
+            valid: expirationValidator.isValid
           }"
         >
       </div>
       <div class="form-group">
-        <label for="cc-name">Cardholder name</label>
+        <label for="cc-cvv">CVV</label>
         <input
-          type="text"
-          id="cc-name"
-          v-model="creditCard.ccName"
-          :class="{ valid: ccNameValid }"
+          type="password"
+          id="cc-cvv"
+          v-model="cvv"
+          :class="{
+            invalid: !cvvValidator.isPotentiallyValid,
+            valid: cvvValidator.isValid
+          }"
+          autocomplete="off"
         >
       </div>
-      <div class="row">
-        <div class="form-group">
-          <label for="cc-expiry">Expiry date</label>
-          <input
-            type="text"
-            id="cc-expiry"
-            v-model="creditCard.ccExpiry"
-            :class="{
-              invalid: !expirationValidator.isPotentiallyValid,
-              valid: expirationValidator.isValid
-            }"
-          >
-        </div>
-        <div class="form-group">
-          <label for="cc-cvv">CVV</label>
-          <input
-            type="password"
-            id="cc-cvv"
-            v-model="cvv"
-            :class="{
-              invalid: !cvvValidator.isPotentiallyValid,
-              valid: cvvValidator.isValid
-            }"
-            autocomplete="off"
-          >
-        </div>
-      </div>
-      <div class="row">
-        <button class="button" @click.prevent="saveCreditCard" :disabled="!formValid">Save</button>
-        <button class="button cancel" @click.prevent="closeForm">Cancel</button>
-      </div>
+    </div>
+    <div class="row">
+      <button class="button" @click.prevent="saveCreditCard" :disabled="!formValid">Save</button>
+      <button class="button cancel" @click.prevent="closeHandler()">Cancel</button>
     </div>
   </form>
 </template>
@@ -64,7 +61,11 @@ const cardValidator = require('card-validator');
 export default {
   name: 'creditcard-form',
   components: {},
-  props: {},
+  props: {
+    closeHandler: {
+      type: Function,
+    },
+  },
   data() {
     return {
       creditCard: {
@@ -106,9 +107,6 @@ export default {
     saveCreditCard() {
       this.$emit('saveCreditCardForm', this.creditCard);
     },
-    closeForm() {
-      this.$emit('closeForm');
-    },
   },
   watch: {
     activeCreditCard: {
@@ -137,30 +135,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.creditcard-form {
-  display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 10;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.creditcard-form-container {
-  border-radius: 25px;
-  background-color: #fff;
-  box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.2);
-  padding: 15px 20px;
-  max-width: 290px;
-  margin: auto;
-  color: #333;
-}
-.headline {
-  margin: 0 0 30px 0;
-  font-size: 20px;
-  text-align: center;
-}
 .form-group {
   margin-bottom: 30px;
 

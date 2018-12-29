@@ -1,19 +1,28 @@
 <template>
   <div class="checkout">
     <TopHeader />
-    <a href="#" class="add-cc-button" @click.prevent="onAddCreditCardButtonClicked">+</a>
+    <a href="#" class="add-cc-button" @click.prevent="showCreditCardForm = true">+</a>
     <CreditCardSwiper
       :creditCards="creditCards"
       @creditCardChanged="onCreditCardChanged"
     />
-    <transition name="fade">
+    <Overlay
+      v-if="showError"
+      :closeHandler="closeError"
+      headline="Error"
+    >
+      <p>{{ errorMessage }}</p>
+    </Overlay>
+    <Overlay
+      v-if="showCreditCardForm"
+      :closeHandler="closeCreditCardForm"
+      headline="Add new credit card"
+    >
       <CreditCardForm
-        :isVisible="showCreditCardForm"
-        @closeForm="onCloseCreditCardForm"
         @saveCreditCardForm="onSaveCreditCardForm"
-        v-if="showCreditCardForm"
+        :closeHandler="closeCreditCardForm"
       />
-    </transition>
+    </Overlay>
     <CheckoutForm
       :activeCreditCard="activeCreditCard"
       :order="order"
@@ -23,6 +32,7 @@
 
 <script>
 import TopHeader from '@/components/TopHeader.vue';
+import Overlay from '@/components/Overlay.vue';
 import CreditCardSwiper from '@/components/CreditCardSwiper.vue';
 import CreditCardForm from '@/components/CreditCardForm.vue';
 import CheckoutForm from '@/components/CheckoutForm.vue';
@@ -33,6 +43,7 @@ export default {
   name: 'checkout',
   components: {
     TopHeader,
+    Overlay,
     CreditCardSwiper,
     CreditCardForm,
     CheckoutForm,
@@ -64,6 +75,8 @@ export default {
       ],
       activeCreditCardId: null,
       showCreditCardForm: false,
+      errorMessage: '',
+      showError: false,
       order: {
         items: [
           {
@@ -93,17 +106,16 @@ export default {
       const ccExpiryValidator = cardValidator.expirationDate(creditCard.ccExpiry);
       const ccNameValid = creditCard.ccName.length > 0;
       const creditCardValid = ccNumberValidator.isValid && ccExpiryValidator.isValid && ccNameValid;
+
       if (creditCardValid) {
         this.creditCards.push(creditCard);
       } else {
-        alert('This credit card is not valid.');
+        this.errorMessage = 'This credit card is not valid.';
+        this.showError = true;
       }
     },
     onCreditCardChanged(creditCardId) {
       this.activeCreditCardId = creditCardId;
-    },
-    onAddCreditCardButtonClicked() {
-      this.showCreditCardForm = true;
     },
     onSaveCreditCardForm(creditCard) {
       this.showCreditCardForm = false;
@@ -111,7 +123,10 @@ export default {
       newCard.id = this.creditCards.length;
       this.addCreditCard(newCard);
     },
-    onCloseCreditCardForm() {
+    closeError() {
+      this.showError = false;
+    },
+    closeCreditCardForm() {
       this.showCreditCardForm = false;
     },
   },
@@ -134,11 +149,5 @@ export default {
   color: #fff;
   font-size: 15px;
   cursor: pointer;
-}
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .25s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
 }
 </style>

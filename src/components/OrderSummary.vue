@@ -23,7 +23,6 @@
 
 export default {
   name: 'order-summary',
-  components: {},
   props: {
     order: {
       type: Object,

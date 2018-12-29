@@ -3,7 +3,8 @@
     <h2 class="headline">Your order:</h2>
     <OrderSummary :order="order" />
     <button class="fullwidth-button">
-      Pay {{ order.total }}&euro;<div class="subline">with this card</div>
+      Pay {{ order.total }}&euro;<br>
+      <span class="subline">with this card</span>
     </button>
   </form>
 </template>
@@ -26,12 +27,6 @@ export default {
       default: () => {},
     },
   },
-  data() {
-    return {};
-  },
-  computed: {},
-  methods: {},
-  watch: {},
 };
 </script>
 
