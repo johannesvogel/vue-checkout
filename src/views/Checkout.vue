@@ -101,14 +101,16 @@ export default {
     },
   },
   methods: {
-    addCreditCard(creditCard) {
+    onSaveCreditCardForm(creditCard) {
       const ccNumberValidator = cardValidator.number(creditCard.ccNumber);
       const ccExpiryValidator = cardValidator.expirationDate(creditCard.ccExpiry);
       const ccNameValid = creditCard.ccName.length > 0;
       const creditCardValid = ccNumberValidator.isValid && ccExpiryValidator.isValid && ccNameValid;
 
       if (creditCardValid) {
-        this.creditCards.push(creditCard);
+        const newCard = creditCard;
+        newCard.id = this.creditCards.length;
+        this.creditCards.push(newCard);
       } else {
         this.errorMessage = 'This credit card is not valid.';
         this.showError = true;
@@ -116,12 +118,6 @@ export default {
     },
     onCreditCardChanged(creditCardId) {
       this.activeCreditCardId = creditCardId;
-    },
-    onSaveCreditCardForm(creditCard) {
-      this.showCreditCardForm = false;
-      const newCard = creditCard;
-      newCard.id = this.creditCards.length;
-      this.addCreditCard(newCard);
     },
     closeError() {
       this.showError = false;

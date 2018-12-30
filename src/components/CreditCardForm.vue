@@ -4,7 +4,7 @@
       <label for="cc-number">Card number</label>
       <input
         type="text"
-        id="card-number"
+        id="cc-number"
         v-model="creditCard.ccNumber"
         :class="{
           invalid: !cardNumberValidator.isPotentiallyValid,
@@ -49,8 +49,19 @@
       </div>
     </div>
     <div class="row">
-      <button class="button" @click.prevent="saveCreditCard" :disabled="!formValid">Save</button>
-      <button class="button cancel" @click.prevent="closeHandler()">Cancel</button>
+      <button
+        class="button save"
+        @click.prevent="saveCreditCard"
+        :disabled="!formValid"
+      >
+        Save
+      </button>
+      <button
+        class="button cancel"
+        @click.prevent="closeHandler()"
+      >
+        Cancel
+      </button>
     </div>
   </form>
 </template>
@@ -106,6 +117,7 @@ export default {
     },
     saveCreditCard() {
       this.$emit('saveCreditCardForm', this.creditCard);
+      this.closeHandler();
     },
   },
   watch: {

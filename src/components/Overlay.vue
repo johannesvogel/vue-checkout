@@ -3,7 +3,7 @@
     <div class="overlay" @click="closeOverlay">
       <div class="overlay-content" @click.stop>
         <a class="close-button" @click.prevent="closeOverlay">x</a>
-        <h2 class="headline">{{ headline }}</h2>
+        <h2 class="overlay-headline">{{ headline }}</h2>
         <slot />
       </div>
     </div>
@@ -56,7 +56,7 @@ export default {
   margin: auto;
   color: #333;
 }
-.headline {
+.overlay-headline {
   margin: 0 0 30px 0;
   font-size: 20px;
   text-align: center;
