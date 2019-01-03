@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import TopHeader from '@/components/TopHeader.vue';
-import Overlay from '@/components/Overlay.vue';
-import CreditCardSwiper from '@/components/CreditCardSwiper.vue';
-import CreditCardForm from '@/components/CreditCardForm.vue';
+import TopHeader from '@/components/base/TopHeader.vue';
+import Overlay from '@/components/base/Overlay.vue';
+import CreditCardSwiper from '@/components/credit-card/CreditCardSwiper.vue';
+import CreditCardForm from '@/components/credit-card/CreditCardForm.vue';
 import CheckoutForm from '@/components/CheckoutForm.vue';
 
 const cardValidator = require('card-validator');
@@ -140,10 +140,10 @@ export default {
   z-index: 1;
   top: 0;
   right: 0;
-  padding: 20px 20px;
+  padding: 10px 15px;;
   text-decoration: none;
-  color: #fff;
-  font-size: 15px;
+  color: $color-white;
+  font-size: 30px;
   cursor: pointer;
 }
 </style>

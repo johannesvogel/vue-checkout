@@ -12,7 +12,6 @@
 
 export default {
   name: 'credit-card-icon',
-  components: {},
   props: {
     creditCardType: {
       type: String,
@@ -40,6 +39,7 @@ export default {
 .credit-card-icon {
   text-align: right;
 }
+
 .credit-card-icon-image {
   height: 30px;
 }

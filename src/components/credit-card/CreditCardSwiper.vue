@@ -16,7 +16,7 @@
 
 <script>
 import 'swiper/dist/css/swiper.css';
-import CreditCard from '@/components/CreditCard.vue';
+import CreditCard from '@/components/credit-card/CreditCard.vue';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 
 export default {
@@ -29,7 +29,6 @@ export default {
   props: {
     creditCards: {
       type: Array,
-      default: () => [],
     },
   },
   data() {
@@ -39,6 +38,7 @@ export default {
         slidesPerView: 1,
         spaceBetween: 30,
         centeredSlides: true,
+        grabCursor: true,
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
@@ -80,19 +80,22 @@ export default {
   padding: 50px 20px 20px 20px;
   overflow: hidden;
 }
+
 .credit-card-swiper {
   width: 100%;
-  height: 100%;
+  // height: 100%;
   margin: 0 auto;
 }
+
 .swiper-item {
-  height: 100%;
+  // height: 100%;
   text-align: center;
   font-size: 18px ;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .swiper-pagination {
   bottom: 0;
 }
@@ -109,12 +112,12 @@ export default {
   margin: 0 5px;
   height: 2px;
   width: 25px;
-  background-color: #7FBCFE;
+  background-color: $color-light-blue;
   transition: background-color 300ms linear;
   opacity: 1;
 
   &-active {
-    background-color: #4449D8;
+    background-color: $color-dark-purple;
     transition: background-color 300ms linear;
   }
 

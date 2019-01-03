@@ -2,7 +2,7 @@
   <form class="checkout-form">
     <h2 class="headline">Your order:</h2>
     <OrderSummary :order="order" />
-    <button class="fullwidth-button">
+    <button class="button fullwidth">
       Pay {{ order.total }}&euro;<br>
       <span class="subline">with this card</span>
     </button>
@@ -20,11 +20,9 @@ export default {
   props: {
     activeCreditCard: {
       type: Object,
-      default: () => {},
     },
     order: {
       type: Object,
-      default: () => {},
     },
   },
 };
@@ -32,30 +30,28 @@ export default {
 
 <style lang="scss" scoped>
 .checkout-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   padding: 20px;
-  width: 100%;
+  width: 85%;
   flex-grow: 1;
   max-width: 290px;
   margin: 0 auto;
 }
-.headline {
-  margin-bottom: 0;
-}
-.fullwidth-button {
-  width: 100%;
+
+.button {
   margin: 0 auto 20px auto;
   padding: 10px 0;
-  color: #ffffff;
+  color: $color-white;
   font-size: 20px;
-  background-image: linear-gradient(to bottom right, #9272FE, #38B8FF);
+  background-image: linear-gradient(to bottom right, $color-purple, $color-blue);
   border-radius: 10px;
   border: none;
-  box-shadow: 5px 5px 20px 0px #C0CFFA;
+  box-shadow: 5px 5px 20px 0px $color-light-grey;
   cursor: pointer;
   transition: all 300ms linear;
+
+  &.fullwidth {
+    width: 100%;
+  }
 
   .subline {
     margin-top: 5px;

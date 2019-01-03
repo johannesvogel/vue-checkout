@@ -1,6 +1,5 @@
 <template>
   <div class="header">
-    <a href="#" class="back-button">&lt;</a>
     <h1 class="headline">Checkout</h1>
   </div>
 </template>
@@ -21,19 +20,11 @@ export default {
   margin-top: 10px;
   opacity: 0.8;
 }
-.back-button {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 10px 20px;
-  text-decoration: none;
-  color: #fff;
-  font-size: 15px;
-}
+
 .headline {
   flex-grow: 1;
   text-align: center;
-  color: #fff;
+  color: $color-white;
   font-size: 15px;
   font-weight: normal;
 }

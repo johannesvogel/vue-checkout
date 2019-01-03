@@ -5,6 +5,7 @@
       <input
         type="text"
         id="cc-number"
+        placeholder="1111 2222 3333 4444 5555"
         v-model="creditCard.ccNumber"
         :class="{
           invalid: !cardNumberValidator.isPotentiallyValid,
@@ -17,6 +18,7 @@
       <input
         type="text"
         id="cc-name"
+        placeholder="John Doe"
         v-model="creditCard.ccName"
         :class="{ valid: ccNameValid }"
       >
@@ -27,6 +29,7 @@
         <input
           type="text"
           id="cc-expiry"
+          placeholder="02/24"
           v-model="creditCard.ccExpiry"
           :class="{
             invalid: !expirationValidator.isPotentiallyValid,
@@ -39,6 +42,7 @@
         <input
           type="password"
           id="cc-cvv"
+          placeholder="123"
           v-model="cvv"
           :class="{
             invalid: !cvvValidator.isPotentiallyValid,
@@ -71,7 +75,6 @@ const cardValidator = require('card-validator');
 
 export default {
   name: 'creditcard-form',
-  components: {},
   props: {
     closeHandler: {
       type: Function,
@@ -152,31 +155,34 @@ export default {
 
   label {
     display: block;
-    color: #D7D9E1;
     font-size: 13px;
   }
 
   input {
     width: 100%;
     border: none;
-    border-bottom: 1px solid #D7D9E1;
+    border-bottom: 1px solid $color-grey;
     transition: border-bottom-color 300ms linear;
     font-size: 20px;
     font-weight: bold;
-    color: #0133B5;
+    color: $color-dark-blue;
     padding: 5px 0;
 
     &:focus {
       outline: none;
     }
 
+    &::placeholder {
+      color: $color-grey;
+    }
+
     &.invalid {
-      border-bottom-color: red;
+      border-bottom-color: $color-red;
       transition: border-bottom-color 300ms linear;
     }
 
     &.valid {
-      border-bottom-color: green;
+      border-bottom-color: $color-green;
       transition: border-bottom-color 300ms linear;
     }
   }
@@ -198,13 +204,13 @@ export default {
     flex-grow: 1;
     margin-right: 30px;
     padding: 10px 0;
-    color: #ffffff;
+    color: $color-white;
     font-size: 20px;
-    background-image: linear-gradient(to bottom right, #9272FE, #38B8FF);
+    background-image: linear-gradient(to bottom right, $color-purple, $color-blue);
     border: 0;
     border-radius: 10px;
     border: none;
-    box-shadow: 5px 5px 20px 0px #C0CFFA;
+    box-shadow: 5px 5px 20px 0px $color-light-grey;
     cursor: pointer;
     transition: all 300ms linear;
 
@@ -218,7 +224,7 @@ export default {
     }
 
     &.cancel {
-      background-image: linear-gradient(to bottom right, darkred, red);
+      background-image: linear-gradient(to bottom right, $color-dark-red, $color-red);
     }
   }
 }

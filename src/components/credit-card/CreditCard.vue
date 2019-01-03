@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import CreditCardIcon from '@/components/CreditCardIcon.vue';
+import CreditCardIcon from '@/components/credit-card/CreditCardIcon.vue';
 
 export default {
   name: 'credit-card',
@@ -20,15 +20,11 @@ export default {
   props: {
     creditCard: {
       type: Object,
-      default: () => {},
     },
-  },
-  data() {
-    return {};
   },
   computed: {
     ccNumber() {
-      if (this.creditCard.ccNumber) {
+      if (this.creditCard && this.creditCard.ccNumber) {
         const ccNumberMasked = this.creditCard.ccNumber.replace(/\s/g, '').replace(/.(?=.{4,}$)/g, '•');
         const ccNumberWithSpaces = ccNumberMasked.replace(/[^\dA-Z•]/g, '').replace(/(.{4})/g, '$1 ').trim();
         return ccNumberWithSpaces;
@@ -41,15 +37,15 @@ export default {
 
 <style lang="scss" scoped>
 .credit-card {
-  flex: 0 0 250px;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   height: 140px;
   text-align: left;
-  color: #ffffff;
-  background-image: linear-gradient(to bottom right, #946EFF, #5BB1FE);
+  color: $color-white;
+  background-image: linear-gradient(to bottom right, $color-purple, $color-blue);
   border-radius: 20px;
-  box-shadow: 10px 10px 40px 0px #835FFE;
+  box-shadow: 10px 10px 25px 0px $color-purple;
   margin: 10px 30px 30px 10px;
   padding: 20px;
 }
